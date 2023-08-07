@@ -18,5 +18,4 @@ public class Media {
     private String url;
     @ManyToOne
     private User user;
-    private Integer reactionCount = BigInteger.ZERO.intValue();
 }
