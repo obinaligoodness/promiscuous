@@ -15,7 +15,7 @@ import java.net.URI;
 @Slf4j
 @AllArgsConstructor
 public class BrevoMailService implements MailService{
-
+    //TODO: Remove hardcoded values
     private final AppConfig appConfig;
     @Override
     public EmailNotificationResponse send(EmailNotificationRequest emailNotificationRequest) {
