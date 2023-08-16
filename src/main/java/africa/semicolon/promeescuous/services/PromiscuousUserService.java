@@ -1,18 +1,24 @@
 package africa.semicolon.promeescuous.services;
 
 import africa.semicolon.promeescuous.config.AppConfig;
-import africa.semicolon.promeescuous.dtos.requests.EmailNotificationRequest;
-import africa.semicolon.promeescuous.dtos.requests.Recipient;
-import africa.semicolon.promeescuous.dtos.requests.RegisterUserRequest;
-import africa.semicolon.promeescuous.dtos.responses.ActivateAccountResponse;
-import africa.semicolon.promeescuous.dtos.responses.ApiResponse;
-import africa.semicolon.promeescuous.dtos.responses.GetUserResponse;
-import africa.semicolon.promeescuous.dtos.responses.RegisterUserResponse;
+import africa.semicolon.promeescuous.dtos.requests.*;
+import africa.semicolon.promeescuous.dtos.responses.*;
 import africa.semicolon.promeescuous.exceptions.AccountActivationFailedException;
+import africa.semicolon.promeescuous.exceptions.BadCredentialsException;
+import africa.semicolon.promeescuous.exceptions.PromiscuousBaseException;
 import africa.semicolon.promeescuous.exceptions.UserNotFoundException;
 import africa.semicolon.promeescuous.models.Address;
 import africa.semicolon.promeescuous.models.User;
 import africa.semicolon.promeescuous.repositories.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.github.fge.jackson.jsonpointer.JsonPointer;
+import com.github.fge.jackson.jsonpointer.JsonPointerException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.JsonPatchOperation;
+import com.github.fge.jsonpatch.ReplaceOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,16 +26,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static africa.semicolon.promeescuous.dtos.responses.ResponseMessage.ACCOUNT_ACTIVATION_SUCCESSFUL;
 import static africa.semicolon.promeescuous.dtos.responses.ResponseMessage.USER_REGISTRATION_SUCCESSFUL;
 import static africa.semicolon.promeescuous.exceptions.ExceptionMessage.*;
 import static africa.semicolon.promeescuous.utils.AppUtil.*;
-import static africa.semicolon.promeescuous.utils.JwtUtil.extractEmailFrom;
-import static africa.semicolon.promeescuous.utils.JwtUtil.isValidJwt;
+import static africa.semicolon.promeescuous.utils.JwtUtil.*;
 
 @Repository
 @AllArgsConstructor
@@ -55,7 +63,25 @@ public class PromiscuousUserService implements UserService{
         return registerUserResponse;
     }
 
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+        Optional<User> foundUser = userRepository.readByEmail(email);
+        User user = foundUser.orElseThrow(()->new UserNotFoundException(
+                String.format(USER_WITH_EMAIL_NOT_FOUND_EXCEPTION.getMessage(), email)
+        ));
+        boolean isValidPassword = matches(user.getPassword(), password);
+        if (isValidPassword) return buildLoginResponse(email);
+        throw new BadCredentialsException(INVALID_CREDENTIALS_EXCEPTION.getMessage());
+    }
 
+    private static LoginResponse buildLoginResponse(String email) {
+        String accessToken = generateToken(email);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setAccessToken(accessToken);
+        return loginResponse;
+    }
 
 
     @Override
@@ -74,6 +100,7 @@ public class PromiscuousUserService implements UserService{
         User user = foundUser.orElseThrow(
                 ()->new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.getMessage())
         );
+        System.out.println(userRepository.findAll());
         GetUserResponse getUserResponse = buildGetUserResponse(user);
         return getUserResponse;
     }
@@ -94,6 +121,46 @@ public class PromiscuousUserService implements UserService{
                 .toList();
     }
 
+
+
+    @Override
+    public UpdateUserResponse updateProfile(UpdateUserRequest updateUserRequest, Long id) {
+        User user = findUserById(id);
+
+        return null;
+    }
+
+    private JsonPatch buildUpdatePatch(UpdateUserRequest updateUserRequest) {
+        JsonPatch patch;
+        Field[] fields = updateUserRequest.getClass().getDeclaredFields();
+
+        List<ReplaceOperation> operations=Arrays.stream(fields)
+                                           .filter(field -> field!=null)
+                                           .map(field->{
+                                               try {
+                                                   String path = "/"+field.getName();
+                                                   JsonPointer pointer = new JsonPointer(path);
+                                                   String value = field.get(field.getName()).toString();
+                                                   TextNode node = new TextNode(value);
+                                                   ReplaceOperation operation = new ReplaceOperation(pointer, node);
+                                                   return operation;
+                                               } catch (Exception exception) {
+                                                   throw new RuntimeException(exception);
+                                               }
+                                           }).toList();
+
+        List<JsonPatchOperation> patchOperations = new ArrayList<>(operations);
+        return new JsonPatch(patchOperations);
+    }
+
+    private User findUserById(Long id){
+        Optional<User> foundUser = userRepository.findById(id);
+        User user = foundUser.orElseThrow(()->
+                new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.getMessage()));
+        return user;
+    }
+
+
     private Pageable buildPageRequest(int page, int pageSize) {
         if (page<1&&pageSize<1)return PageRequest.of(0, 10);
         if (page<1)return PageRequest.of(0, pageSize);
@@ -106,7 +173,7 @@ public class PromiscuousUserService implements UserService{
         String email = extractEmailFrom(token);
         Optional<User> user = userRepository.readByEmail(email);
         User foundUser = user.orElseThrow(()->new UserNotFoundException(
-               String.format(USER_WITH_EMAIL_NOT_FOUND_EXCEPTION.getMessage(), email)
+                String.format(USER_WITH_EMAIL_NOT_FOUND_EXCEPTION.getMessage(), email)
         ));
         foundUser.setActive(true);
         User savedUser = userRepository.save(foundUser);
@@ -138,7 +205,7 @@ public class PromiscuousUserService implements UserService{
 
     private static ApiResponse<?> activateTestAccount() {
         return ApiResponse.builder()
-                   .build();
+                .build();
     }
 
 

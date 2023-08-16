@@ -12,8 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -35,11 +36,22 @@ public class UserControllerTest {
                     MockMvcRequestBuilders.post("/api/v1/user")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
-            ).andExpect(MockMvcResultMatchers.status()
+            ).andExpect(status()
                                              .is(HttpStatus.CREATED.value()))
-                    .andDo(MockMvcResultHandlers.print());
+                    .andDo(print());
         } catch (Exception exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    @Test
+    public void testGetUserById(){
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/1"))
+                    .andExpect(status().is(HttpStatus.OK.value()))
+                    .andDo(print());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

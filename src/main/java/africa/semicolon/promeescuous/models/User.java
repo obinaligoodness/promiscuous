@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -23,9 +24,11 @@ public class User {
     private Address address;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private LocalDateTime createdAt;
+    private String createdAt;
     private String firstName;
     private String lastName;
+    @ElementCollection
+    private Set<Interest> interests;
     @Column(unique = true, nullable = false)
     private String email;
     @Column(unique = true)
@@ -39,6 +42,9 @@ public class User {
 
     @PrePersist
     public void setCreatedAt(){
-        createdAt=LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        createdAt = currentTime.format(formatter);
+
     }
 }

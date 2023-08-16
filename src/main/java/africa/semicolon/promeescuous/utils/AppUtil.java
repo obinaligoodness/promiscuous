@@ -31,9 +31,12 @@ public class AppUtil {
 
     public static String generateActivationLink(String baseUrl, String email){
         String token = generateToken(email);
-        //localhost:8080/user/activate?code=xxxxxxxxxxxx
         String activationLink = baseUrl+ACTIVATE_ACCOUNT_PATH+token;
         return activationLink;
+    }
+
+    public static boolean matches(String first, String second){
+        return first.equals(second);
     }
 
 
