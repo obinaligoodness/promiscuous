@@ -1,12 +1,19 @@
 package africa.semicolon.promeescuous.models;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "users")
@@ -15,19 +22,25 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate dateOfBirth;
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Gender gender;
     private String createdAt;
     private String firstName;
+
     private String lastName;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(value = STRING)
     private Set<Interest> interests;
     @Column(unique = true, nullable = false)
     private String email;
@@ -35,7 +48,7 @@ public class User {
     private String phoneNumber;
     @Column(nullable = false)
     private String password;
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = STRING)
     private Role role;
     private boolean isActive;
 

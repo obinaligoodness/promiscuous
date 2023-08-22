@@ -9,17 +9,12 @@ import java.util.List;
 
 public interface UserService {
     RegisterUserResponse register(RegisterUserRequest registerUserRequest);
-
     LoginResponse login(LoginRequest loginRequest);
     ApiResponse<?> activateUserAccount(String token);
-
-
 
     GetUserResponse getUserById(Long id);
 
     List<GetUserResponse> getAllUsers(int page, int pageSize);
 
     UpdateUserResponse updateProfile(UpdateUserRequest updateUserRequest, Long id);
-
-
 }

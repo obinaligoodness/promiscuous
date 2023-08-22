@@ -2,11 +2,11 @@ package africa.semicolon.promeescuous.controllers;
 
 
 import africa.semicolon.promeescuous.dtos.requests.RegisterUserRequest;
+import africa.semicolon.promeescuous.dtos.requests.UpdateUserRequest;
 import africa.semicolon.promeescuous.dtos.responses.GetUserResponse;
 import africa.semicolon.promeescuous.dtos.responses.RegisterUserResponse;
 import africa.semicolon.promeescuous.dtos.responses.UpdateUserResponse;
 import africa.semicolon.promeescuous.services.UserService;
-import com.github.fge.jsonpatch.JsonPatch;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +28,12 @@ public class UserController {
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Long id){
         GetUserResponse user = userService.getUserById(id);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateUserResponse> updateUserProfile(@ModelAttribute UpdateUserRequest updateUserRequest, @PathVariable Long id){
+        UpdateUserResponse response=userService.updateProfile(updateUserRequest, id);
+        return ResponseEntity.ok(response);
     }
 
 

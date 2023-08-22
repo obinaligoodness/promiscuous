@@ -1,5 +1,6 @@
 package africa.semicolon.promeescuous.dtos.requests;
 
+import africa.semicolon.promeescuous.models.Interest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,8 +11,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class UpdateUserRequest {
-  private String firstname;
-  private String lastname;
+  private String firstName;
+  private String lastName;
   private LocalDate dateOfBirth;
   private String password;
   private String gender;

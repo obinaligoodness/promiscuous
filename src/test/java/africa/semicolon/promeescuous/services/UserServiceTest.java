@@ -19,10 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -103,23 +100,25 @@ public class UserServiceTest {
         GetUserResponse userResponse = userService.getUserById(500L);
 
         String fullName = userResponse.getFullName();
-        String expectedFullName = new StringBuilder().append(updateUserRequest.getFirstname())
+        String expectedFullName = new StringBuilder().append(updateUserRequest.getFirstName())
                                                      .append(BLANK_SPACE)
-                                                     .append(updateUserRequest.getLastname())
+                                                     .append(updateUserRequest.getLastName())
                                                      .toString();
         assertThat(fullName).isEqualTo(expectedFullName);
 
     }
 
     private UpdateUserRequest buildUpdateRequest() {
-        Set<String> interests = Set.of("Swimming", "Sports", "Cooking");
+        Set<String> interests = Set.of("swimming", "sports", "cooking");
         UpdateUserRequest updateUserRequest = new UpdateUserRequest();
         updateUserRequest.setDateOfBirth(LocalDate.of(2005, Month.NOVEMBER.ordinal(), 25));
-        updateUserRequest.setFirstname("Sheriff");
-        updateUserRequest.setLastname("Awofiranye");
+        updateUserRequest.setFirstName("Sheriff");
+        updateUserRequest.setLastName("Awofiranye");
+        updateUserRequest.setPassword("password");
         MultipartFile testImage = getTestImage();
         updateUserRequest.setProfileImage(testImage);
         updateUserRequest.setInterests(interests);
+        updateUserRequest.setCountry("Ghana");
         return updateUserRequest;
     }
 
