@@ -6,6 +6,7 @@ public enum ExceptionMessage {
 
     ACCOUNT_ACTIVATION_FAILED_EXCEPTION("Account activation was not successful"),
 
+    MEDIA_NOT_FOUND(""),
     INVALID_CREDENTIALS_EXCEPTION("Invalid authentication credentials"),
     USER_REGISTRATION_FAILED_EXCEPTION("User registration failed");
 

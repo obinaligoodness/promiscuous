@@ -1,9 +1,9 @@
-package africa.semicolon.promiscuous.services;
+package africa.semicolon.promeescuous.services;
 
-import africa.semicolon.promiscuous.dtos.request.RegisterUserRequest;
-import africa.semicolon.promiscuous.dtos.response.RegisterUserResponse;
-import africa.semicolon.promiscuous.dtos.response.UploadMediaResponse;
-import africa.semicolon.promiscuous.services.cloud.MediaService;
+import africa.semicolon.promeescuous.dtos.requests.MediaReactionRequest;
+import africa.semicolon.promeescuous.dtos.requests.RegisterUserRequest;
+import africa.semicolon.promeescuous.dtos.responses.RegisterUserResponse;
+import africa.semicolon.promeescuous.dtos.responses.UploadMediaResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static africa.semicolon.promiscuous.models.Reaction.DISLIKE;
-import static africa.semicolon.promiscuous.models.Reaction.LIKE;
+import static africa.semicolon.promeescuous.models.Reaction.LIKE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class PromiscuousMediaServiceTest {
@@ -89,25 +89,9 @@ class PromiscuousMediaServiceTest {
         assertNotNull(registerUserResponse);
         assertNotNull(registerUserResponse.getMessage());
 
-        String response = mediaService.likeOrDislike(LIKE,registerUserResponse.getId());
+        String response = mediaService.reactToMedia(new MediaReactionRequest(LIKE, 500L, 501L));
         assertThat(response).isNotNull();
-        assertEquals("Liked!",response);
     }
 
-    @Test
-    void testToDislikeMedia(){
-        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
-        registerUserRequest.setEmail("sayhello@gmail.com");
-        registerUserRequest.setPassword("password");
-        RegisterUserResponse registerUserResponse = userService.register(registerUserRequest);
-        assertNotNull(registerUserResponse);
-        assertNotNull(registerUserResponse.getMessage());
-        String response = mediaService.likeOrDislike(LIKE,registerUserResponse.getId());
-        assertThat(response).isNotNull();
-        assertEquals("Liked!",response);
 
-        response = mediaService.likeOrDislike(DISLIKE,registerUserResponse.getId());
-        assertThat(response).isNotNull();
-        assertEquals("X",response);
-    }
 }

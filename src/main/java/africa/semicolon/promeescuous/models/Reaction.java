@@ -1,5 +1,6 @@
 package africa.semicolon.promeescuous.models;
 
 public enum Reaction {
-    LIKE, DISLIKE, TURBO, FAVOURITE
+    LIKE, DISLIKE, TURBO, FAVOURITE;
+
 }

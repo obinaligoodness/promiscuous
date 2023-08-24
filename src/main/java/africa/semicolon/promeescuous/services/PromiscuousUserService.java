@@ -23,11 +23,9 @@ import com.github.fge.jsonpatch.ReplaceOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +46,8 @@ public class PromiscuousUserService implements UserService{
     private final MailService mailService;
     private final AppConfig appConfig;
     private final CloudService cloudService;
+
+    private final MediaService mediaService;
 
     @Override
     public RegisterUserResponse register(RegisterUserRequest registerUserRequest) {
@@ -135,6 +135,22 @@ public class PromiscuousUserService implements UserService{
         user.setAddress(userAddress);
         JsonPatch updatePatch = buildUpdatePatch(updateUserRequest);
         return applyPatch(updatePatch, user);
+    }
+
+    @Override
+    public UploadMediaResponse uploadMedia(MultipartFile mediaToUpload) {
+        return mediaService.uploadMedia(mediaToUpload);
+    }
+
+    @Override
+    public UploadMediaResponse uploadProfilePicture(MultipartFile mediaToUpload) {
+        return mediaService.uploadProfilePicture(mediaToUpload);
+    }
+
+    @Override
+    public ApiResponse<?> reactToMedia(MediaReactionRequest mediaReactionRequest) {
+        String response = mediaService.reactToMedia(mediaReactionRequest);
+        return ApiResponse.builder().data(response).build();
     }
 
     private String uploadImage(MultipartFile profileImage) {

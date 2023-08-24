@@ -1,16 +1,17 @@
 package africa.semicolon.promeescuous.controllers;
 
 
+import africa.semicolon.promeescuous.dtos.requests.MediaReactionRequest;
 import africa.semicolon.promeescuous.dtos.requests.RegisterUserRequest;
 import africa.semicolon.promeescuous.dtos.requests.UpdateUserRequest;
-import africa.semicolon.promeescuous.dtos.responses.GetUserResponse;
-import africa.semicolon.promeescuous.dtos.responses.RegisterUserResponse;
-import africa.semicolon.promeescuous.dtos.responses.UpdateUserResponse;
+import africa.semicolon.promeescuous.dtos.requests.UploadMediaRequest;
+import africa.semicolon.promeescuous.dtos.responses.*;
 import africa.semicolon.promeescuous.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -38,19 +39,18 @@ public class UserController {
     @PostMapping("/uploadMedia")
     public ResponseEntity<UploadMediaResponse> uploadMedia(@ModelAttribute UploadMediaRequest mediaRequest){
         MultipartFile mediaToUpload = mediaRequest.getMedia();
-        UploadMediaResponse response = mediaService.uploadMedia(mediaToUpload);
+        UploadMediaResponse response = userService.uploadMedia(mediaToUpload);
         return ResponseEntity.ok(response);
     }
     @PostMapping("uploadProfilePicture")
     public ResponseEntity<UploadMediaResponse> uploadProfilePicture(@ModelAttribute UploadMediaRequest mediaRequest){
         MultipartFile mediaToUpload = mediaRequest.getMedia();
-        UploadMediaResponse response = mediaService.uploadProfilePicture(mediaToUpload);
+        UploadMediaResponse response = userService.uploadProfilePicture(mediaToUpload);
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/likeOrDislike/{id}")
-    public ResponseEntity<?> likeOrDislike(@RequestBody LikeOrDislikeRequest userReaction, @PathVariable Long id){
-        Reaction mediaReaction = userReaction.getReaction();
-        String response = mediaService.likeOrDislike(mediaReaction,id);
+    @PostMapping("/react/{id}")
+    public ResponseEntity<?> reactToMedia(@RequestBody MediaReactionRequest mediaReactionRequest){
+        ApiResponse<?> response = userService.reactToMedia(mediaReactionRequest);
         return ResponseEntity.ok(response);
     }
 
