@@ -1,0 +1,12 @@
+package africa.semicolon.promeescuous.dtos.responses;
+
+public enum ResponseMessage {
+    ACCOUNT_ACTIVATION_SUCCESSFUL,
+    USER_REGISTRATION_SUCCESSFUL,
+
+    RESPONSE_MESSAGE_SUCCESSFUL,
+    VERIFICATION_IN_PROGRESS,
+    VERIFICATION_APPROVED,
+    VERIFICATION_DISAPPROVED,
+
+}

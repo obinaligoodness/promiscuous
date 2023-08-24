@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ public class AppUtil {
 
     public static final String APP_NAME = "promiscuous inc.";
     public static final String APP_EMAIL = "noreply@promiscuous.africa";
+    public static final String TEST_VIDEO_LOCATION = "";
 
     private static final String MAIL_TEMPLATE_LOCATION = "C:\\Users\\semicolon\\Documents\\spring_projects\\prom-scuous\\src\\main\\resources\\templates\\index.html";
 
