@@ -1,28 +1,31 @@
-package africa.semicolon.promiscuous.services.cloud;
+package africa.semicolon.promeescuous.services.cloud;
 
-import africa.semicolon.promiscuous.config.AppConfig;
-import africa.semicolon.promiscuous.dtos.response.UploadMediaResponse;
-import africa.semicolon.promiscuous.models.Media;
-import africa.semicolon.promiscuous.models.Reaction;
-import africa.semicolon.promiscuous.models.User;
-import africa.semicolon.promiscuous.repositories.MediaRepository;
-import africa.semicolon.promiscuous.repositories.UserRepository;
+
+import africa.semicolon.promeescuous.config.AppConfig;
+import africa.semicolon.promeescuous.models.Media;
+import africa.semicolon.promeescuous.models.Reaction;
+import africa.semicolon.promeescuous.models.User;
+import africa.semicolon.promeescuous.repositories.MediaRepository;
+import africa.semicolon.promeescuous.repositories.UserRepository;
+import africa.semicolon.promeescuous.services.cloud.CloudService;
+import africa.semicolon.promeescuous.services.cloud.MediaService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import africa.semicolon.promiscuous.dtos.response.UploadMediaResponse;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import static africa.semicolon.promiscuous.models.Reaction.DISLIKE;
-import static africa.semicolon.promiscuous.models.Reaction.LIKE;
-
+import static africa.semicolon.promeescuous.models.Reaction.DISLIKE;
+import static africa.semicolon.promeescuous.models.Reaction.LIKE;
 
 @Service
-public class PromiscuousMediaService implements MediaService{
+public class PromiscuousMediaService implements MediaService {
     private final CloudService cloudService;
     private final AppConfig appConfig;
     private final MediaRepository mediaRepository;
@@ -80,8 +83,8 @@ public class PromiscuousMediaService implements MediaService{
             Map<?,?> response =  uploader.upload(file.getBytes(), ObjectUtils.asMap(
                     "public_id","Promiscuous/Users/profile_images/"+file.getName(),
                     "api_key", appConfig.getCloudApiKey(),
-                    "api_secret", appConfig.getCloudApiSecret(),
-                    "cloud_name", appConfig.getCloudApiName(),
+                    "api_secret", appConfig.getCloudSecret(),
+                    "cloud_name", appConfig.getCloudName(),
                     "secure", true,
                     "resource_type", "auto"
             ));

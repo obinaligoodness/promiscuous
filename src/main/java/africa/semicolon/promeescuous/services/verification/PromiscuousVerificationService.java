@@ -1,4 +1,4 @@
-package africa.semicolon.promeescuous.services;
+package africa.semicolon.promeescuous.services.verification;
 
 
 import africa.semicolon.promeescuous.dtos.requests.VerificationRequest;
@@ -10,6 +10,7 @@ import africa.semicolon.promeescuous.models.Verification;
 import africa.semicolon.promeescuous.repositories.UserRepository;
 import africa.semicolon.promeescuous.repositories.VerificationRepository;
 import africa.semicolon.promeescuous.services.cloud.CloudService;
+import africa.semicolon.promeescuous.services.verification.VerificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import static africa.semicolon.promeescuous.models.VerificationStatus.*;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class VerificationService implements VerificationInterface{
+public class PromiscuousVerificationService implements VerificationService {
     @Autowired
     VerificationRepository verificationRepository;
     @Autowired

@@ -1,11 +1,11 @@
-package africa.semicolon.promeescuous.services;
+package africa.semicolon.promeescuous.services.verification;
 
 
 import africa.semicolon.promeescuous.dtos.requests.VerificationRequest;
 import africa.semicolon.promeescuous.dtos.responses.VerificationResponse;
 import africa.semicolon.promeescuous.models.User;
 
-public interface VerificationInterface {
+public interface VerificationService {
     User findUser(Long id);
     VerificationResponse uploadVideo(VerificationRequest verificationRequest);
 

@@ -6,6 +6,7 @@ import africa.semicolon.promeescuous.dtos.requests.VerificationRequest;
 import africa.semicolon.promeescuous.dtos.responses.VerificationResponse;
 import africa.semicolon.promeescuous.models.User;
 import africa.semicolon.promeescuous.services.cloud.CloudService;
+import africa.semicolon.promeescuous.services.verification.PromiscuousVerificationService;
 import africa.semicolon.promeescuous.utils.AppUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class VerificationServiceTest {
     @Autowired
     private CloudService cloudService;
     @Autowired
-    private VerificationService verificationService;
+    private PromiscuousVerificationService promiscuousVerificationService;
 
 
     @Autowired
@@ -52,7 +53,7 @@ public class VerificationServiceTest {
         assertNotNull(registerUserResponse);
         assertNotNull(registerUserResponse.getMessage());
 
-        User foundUser = verificationService.findUser(1L);
+        User foundUser = promiscuousVerificationService.findUser(1L);
 
         assertThat(foundUser).isNotNull();
     }
@@ -83,7 +84,7 @@ public class VerificationServiceTest {
         verificationRequest.setId(1L);
         verificationRequest.setCloudinaryUserVideo(file);
 
-        VerificationResponse response = verificationService.uploadVideo(verificationRequest);
+        VerificationResponse response = promiscuousVerificationService.uploadVideo(verificationRequest);
         log.info(response.getMessage());
 
         assertThat(response.getMessage()).isNotNull();
@@ -113,11 +114,11 @@ public class VerificationServiceTest {
         verificationRequest.setId(1L);
         verificationRequest.setCloudinaryUserVideo(file);
 
-        VerificationResponse response = verificationService.uploadVideo(verificationRequest);
+        VerificationResponse response = promiscuousVerificationService.uploadVideo(verificationRequest);
         log.info(response.getMessage());
 
         assertThat(response.getMessage()).isNotNull();
-        VerificationResponse verified = verificationService.approveVerification(1L);
+        VerificationResponse verified = promiscuousVerificationService.approveVerification(1L);
         log.info(verified.getMessage());
         assertThat(verified.getMessage()).isNotNull();
     }
@@ -146,11 +147,11 @@ public class VerificationServiceTest {
         verificationRequest.setId(1L);
         verificationRequest.setCloudinaryUserVideo(file);
 
-        VerificationResponse response = verificationService.uploadVideo(verificationRequest);
+        VerificationResponse response = promiscuousVerificationService.uploadVideo(verificationRequest);
         log.info(response.getMessage());
 
         assertThat(response.getMessage()).isNotNull();
-        VerificationResponse verified = verificationService.disapproveVerification(1L);
+        VerificationResponse verified = promiscuousVerificationService.disapproveVerification(1L);
         log.info(verified.getMessage());
         assertThat(verified.getMessage()).isNotNull();
     }

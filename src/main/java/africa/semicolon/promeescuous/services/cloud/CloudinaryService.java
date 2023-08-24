@@ -27,7 +27,8 @@ public class CloudinaryService implements CloudService{
                     "api_key",appConfig.getCloudApiKey(),
                     "api_secret",appConfig.getCloudSecret(),
                     "cloud_name",appConfig.getCloudName(),
-                    "secure",true
+                    "secure",true,
+                    "resource_type", "auto"
             ));
 
             return response.get("url").toString();
@@ -35,25 +36,5 @@ public class CloudinaryService implements CloudService{
             throw new RuntimeException("File upload failed");
         }
 
-    }
-
-    @Override
-    public String uploadVideo(MultipartFile file){
-        Cloudinary cloudinary = new Cloudinary();
-        Uploader uploader = cloudinary.uploader();
-        try{
-            Map<?,?> response = uploader.upload(file.getBytes(), ObjectUtils.asMap("resource_type", "video",
-                    "public_id","promiscous/users/profile_images/"+file.getName(),
-                    "api_key",appConfig.getCloudApiKey(),
-                    "api_secret",appConfig.getCloudSecret(),
-                    "cloud_name", appConfig.getCloudName(),
-                    "secure",true
-            ));
-
-            return response.get("url").toString();
-        }
-        catch (IOException exception){
-            throw new RuntimeException("File upload failed");
-        }
     }
 }

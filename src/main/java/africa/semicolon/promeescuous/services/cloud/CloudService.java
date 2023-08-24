@@ -7,5 +7,4 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface CloudService {
     String upload(MultipartFile file);
-    String uploadVideo(MultipartFile file);
 }
