@@ -39,6 +39,7 @@ import static africa.semicolon.promeescuous.dtos.responses.ResponseMessage.*;
 import static africa.semicolon.promeescuous.exceptions.ExceptionMessage.*;
 import static africa.semicolon.promeescuous.utils.AppUtil.*;
 import static africa.semicolon.promeescuous.utils.JwtUtil.*;
+import static africa.semicolon.promeescuous.dtos.responses.ResponseMessage.ACCOUNT_ACTIVATION_SUCCESSFUL;
 
 @Service
 @Slf4j
@@ -203,10 +204,16 @@ public class PromiscuousUserService implements UserService{
         }
     }
 
-    private User findUserById(Long id){
+//    private User findUserById(Long id){
+//        Optional<User> foundUser = userRepository.findById(id);
+//        User user = foundUser.orElseThrow(()->
+//                new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.getMessage()));
+//        return user;
+//    }
+
+    public User findUserById(Long id){
         Optional<User> foundUser = userRepository.findById(id);
-        User user = foundUser.orElseThrow(()->
-                new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.getMessage()));
+        User user = foundUser.orElseThrow(()->new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.getMessage()));
         return user;
     }
 
