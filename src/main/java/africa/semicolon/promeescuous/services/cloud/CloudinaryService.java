@@ -23,11 +23,12 @@ public class CloudinaryService implements CloudService{
         Uploader uploader = cloudinary.uploader();
         try{
             Map<?,?> response = uploader.upload(file.getBytes(), ObjectUtils.asMap(
-                    "public_id","promiscuous/users/profile_images/"+file.getName(),
+                    "public_id","promiscuous/users/media/"+file.getName(),
                     "api_key",appConfig.getCloudApiKey(),
                     "api_secret",appConfig.getCloudSecret(),
                     "cloud_name",appConfig.getCloudName(),
-                    "secure",true
+                    "secure",true,
+                    "resource_type", "auto"
             ));
 
             return response.get("url").toString();
