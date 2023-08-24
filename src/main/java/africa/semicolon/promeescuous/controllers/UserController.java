@@ -35,6 +35,23 @@ public class UserController {
         UpdateUserResponse response=userService.updateProfile(updateUserRequest, id);
         return ResponseEntity.ok(response);
     }
-
+    @PostMapping("/uploadMedia")
+    public ResponseEntity<UploadMediaResponse> uploadMedia(@ModelAttribute UploadMediaRequest mediaRequest){
+        MultipartFile mediaToUpload = mediaRequest.getMedia();
+        UploadMediaResponse response = mediaService.uploadMedia(mediaToUpload);
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("uploadProfilePicture")
+    public ResponseEntity<UploadMediaResponse> uploadProfilePicture(@ModelAttribute UploadMediaRequest mediaRequest){
+        MultipartFile mediaToUpload = mediaRequest.getMedia();
+        UploadMediaResponse response = mediaService.uploadProfilePicture(mediaToUpload);
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/likeOrDislike/{id}")
+    public ResponseEntity<?> likeOrDislike(@RequestBody LikeOrDislikeRequest userReaction, @PathVariable Long id){
+        Reaction mediaReaction = userReaction.getReaction();
+        String response = mediaService.likeOrDislike(mediaReaction,id);
+        return ResponseEntity.ok(response);
+    }
 
 }

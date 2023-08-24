@@ -11,11 +11,19 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String description;
-    @ElementCollection
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
     private List<Reaction> reactions;
-    @Column(unique = true)
+    @Column(unique = false, columnDefinition = "MEDIUMTEXT", length = 1000)
     private String url;
+
     @ManyToOne
     private User user;
+
+    private boolean isLike;
+
+    public Media(){
+        reactions = new ArrayList<>();
+    }
 }
