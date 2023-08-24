@@ -1,18 +1,21 @@
 package africa.semicolon.promeescuous.models;
 
-
 import jakarta.persistence.*;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Getter
 @Setter
-public class Notification {
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class DirectMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false, columnDefinition = "MEDIUMTEXT", length = 1000)
-    private String content;
-    private Long sender;
-    @ManyToOne
+    private String message;
+    private Long senderId;
+    @ManyToOne()
     private User user;
 }
