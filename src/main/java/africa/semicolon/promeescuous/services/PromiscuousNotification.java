@@ -1,17 +1,17 @@
-package africa.semicolon.promiscuous.services;
+package africa.semicolon.promeescuous.services;
 
-import africa.semicolon.promiscuous.dtos.request.NotificationRequest;
-import africa.semicolon.promiscuous.dtos.response.NotificationResponse;
-import africa.semicolon.promiscuous.models.Notification;
-import africa.semicolon.promiscuous.models.User;
-import africa.semicolon.promiscuous.repositories.NotificationRepository;
-import africa.semicolon.promiscuous.repositories.UserRepository;
+import africa.semicolon.promeescuous.dtos.requests.NotificationRequest;
+import africa.semicolon.promeescuous.dtos.responses.NotificationResponse;
+import africa.semicolon.promeescuous.models.Notification;
+import africa.semicolon.promeescuous.models.User;
+import africa.semicolon.promeescuous.repositories.NotificationRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static africa.semicolon.promiscuous.dtos.response.ResponseMessage.NOTIFICATION_SENT_SUCCESSFULLY;
+import static africa.semicolon.promeescuous.dtos.responses.ResponseMessage.NOTIFICATION_SENT_SUCCESSFULLY;
+
 
 @Service
 @AllArgsConstructor

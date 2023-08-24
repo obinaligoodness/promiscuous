@@ -2,8 +2,10 @@ package africa.semicolon.promeescuous.models;
 
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 @Entity
+@Setter
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
