@@ -1,7 +1,7 @@
-package africa.semicolon.promiscuous.services.cloud;
+package africa.semicolon.promeescuous.services.cloud;
 
+import africa.semicolon.promeescuous.models.Reaction;
 import africa.semicolon.promiscuous.dtos.response.UploadMediaResponse;
-import africa.semicolon.promiscuous.models.Reaction;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MediaService {
